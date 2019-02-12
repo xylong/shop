@@ -65,7 +65,6 @@ class ProductsController extends Controller
 
         $grid->id('Id')->sortable();
         $grid->title('商品名称');
-        $grid->image('Image');
         $grid->on_sale('已上架')->display(function ($value) {
             return $value ? '是' : '否';
         });
@@ -87,7 +86,7 @@ class ProductsController extends Controller
 
         return $grid;
     }
-    
+
     /**
      * Make a form builder.
      *
