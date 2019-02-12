@@ -14,11 +14,11 @@
 //Route::get('/', 'PagesController@root')->name('root');
 Route::redirect('/', '/products')->name('root');
 Route::get('products', 'ProductsController@index')->name('products.index');
-Route::get('products/{product}', 'ProductsController@show')->name('products.show');
+Route::get('products/{product}', 'ProductsController@show')->name('products.show')->where('product', '[0-9]+');
 
 Auth::routes(['verify' => true]);
 
-Route::group(['middleware' => ['auth', 'verified']], function() {
+Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::get('user_addresses', 'UserAddressesController@index')->name('user_addresses.index');
     Route::get('user_addresses/create', 'UserAddressesController@create')->name('user_addresses.create');
     Route::post('user_addresses', 'UserAddressesController@store')->name('user_addresses.store');
@@ -28,4 +28,5 @@ Route::group(['middleware' => ['auth', 'verified']], function() {
 
     Route::post('products/{product}/favorite', 'ProductsController@favor')->name('products.favor');
     Route::delete('products/{product}/favorite', 'ProductsController@disfavor')->name('products.disfavor');
+    Route::get('products/favorites', 'ProductsController@favorites')->name('products.favorites');
 });
