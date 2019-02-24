@@ -37,10 +37,10 @@
                                     @endforeach
                                 </div>
                             </div>
-                            <div class="cart_amount"><label>数量</label><input type="text"
-                                                                             class="form-control form-control-sm"
-                                                                             value="1"><span>件</span><span
-                                    class="stock"></span></div>
+                            <div class="cart_amount"><label>数量</label>
+                                <input type="text" class="form-control form-control-sm" value="1"><span>件</span>
+                                <span class="stock"></span>
+                            </div>
                             <div class="buttons">
                                 @if($favored)
                                     <button class="btn btn-danger btn-disfavor">取消收藏</button>
