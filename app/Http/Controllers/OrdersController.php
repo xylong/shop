@@ -9,10 +9,26 @@ use App\Models\Order;
 use App\Models\ProductSku;
 use App\Models\UserAddress;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * 订单
+ * @package App\Http\Controllers
+ */
 class OrdersController extends Controller
 {
+    public function index(Request $request)
+    {
+        $orders = Order::query()
+            ->with(['items.product', 'items.productSku'])
+            ->where('user_id', $request->user()->id)
+            ->orderBy('created_at', 'desc')
+            ->paginate();
+
+        return view('orders.index', compact('orders'));
+    }
+
     public function store(OrderRequest $request)
     {
         $user = $request->user();

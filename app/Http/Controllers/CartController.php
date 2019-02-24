@@ -7,6 +7,10 @@ use App\Models\CartItem;
 use App\Models\ProductSku;
 use Illuminate\Http\Request;
 
+/**
+ * 购物车
+ * @package App\Http\Controllers
+ */
 class CartController extends Controller
 {
     public function index(Request $request)
