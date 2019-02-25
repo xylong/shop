@@ -2,9 +2,9 @@
 
 return [
     'alipay' => [
-        'app_id'         => '',
-        'ali_public_key' => '',
-        'private_key'    => '',
+        'app_id'         => env('ALI_APP_ID', ''),
+        'ali_public_key' => env('ALI_public_key',''),
+        'private_key'    => env('ALI_private_key',''),
         'log'            => [
             'file' => storage_path('logs/alipay.log'),
         ],
