@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Exceptions\InvalidRequestException;
 use App\Models\Order;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -31,13 +32,42 @@ class PaymentController extends Controller
     {
         // 校验提交的参数是否合法
         $data = app('alipay')->verify();
-        dd($data);
+
+        try {
+            app('alipay')->verify();
+        } catch (\Exception $e) {
+            return view('pages.error', ['msg' => '数据不正确']);
+        }
+
+        return view('pages.success', ['msg' => '付款成功']);
     }
 
     // 服务器端回调
     public function alipayNotify()
     {
         $data = app('alipay')->verify();
-        Log::debug('Alipay notify', $data->all());
+//        Log::debug('Alipay notify', $data->all());
+        // 如果订单状态不是成功或者结束，则不走后续的逻辑
+        if (!in_array($data->trade_status,['TRADE_SUCCESS', 'TRADE_FINISHED'])){
+            return app('alipay')->success();
+        }
+
+        $order = Order::where('no', $data->out_trade_no)->first();
+        if (!$order) {
+            return 'fail';
+        }
+        // 如果这笔订单的状态已经是已支付
+        if ($order->paid_at){
+            // 返回数据给支付宝
+            return app('alipay')->success();
+        }
+
+        $order->update([
+            'paid_at'        => Carbon::now(), // 支付时间
+            'payment_method' => 'alipay', // 支付方式
+            'payment_no'     => $data->trade_no, // 支付宝订单号
+        ]);
+
+        return app('alipay')->success();
     }
 }
